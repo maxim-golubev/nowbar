@@ -74,7 +74,7 @@ case "$MODE" in
   --release)
     mkdir -p build/release
     ZIP="build/release/NowBar-$VERSION.zip"
-    ditto -c -k --sequesterRsrc --keepParent "$STAGE" "$ZIP"
+    ditto -c -k --norsrc --noextattr --keepParent "$STAGE" "$ZIP"   # no __MACOSX clutter; the signature lives in the bundle
     drop_stage
     shasum -a 256 "$ZIP" | tee "$ZIP.sha256"
     echo "Release: $(pwd)/$ZIP"
