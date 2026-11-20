@@ -21,10 +21,18 @@ final class Controller: NSObject {
     // has its own grace: if MC is still open once it runs out, the hide was wrong and the HUD
     // comes back. Cleared once MC is fully gone.
     enum HideCause {
-        case input          // a key or click that closes MC (but a space switch keeps it open)
+        case input          // a key or click that closes MC
+        case spacesBarClick // a click on a desktop in the spaces bar: switches to it and closes MC,
+                            // but a click on an empty spot doesn't, so it gets a short grace
         case prediction     // our reading of a released swipe
         case exposeExit     // the Dock said MC is closing
-        var grace: TimeInterval { self == .input ? 1.5 : 0.8 }
+        var grace: TimeInterval {
+            switch self {
+            case .input: return 1.5
+            case .spacesBarClick: return 0.6
+            case .prediction, .exposeExit: return 0.8
+            }
+        }
     }
     var hiddenBy: HideCause?
     var hiddenAt = Date.distantPast
@@ -51,6 +59,7 @@ final class Controller: NSObject {
     var moveTap: CFMachPort?     // session tap: suppress hover-through highlight
     var hudOwnsPress = false     // a press that began on the HUD through the MC tap: its drags and release are ours
     var clickOrigin: CGPoint?    // where a press outside the HUD began; released in place, it's a click that closes MC
+    var clickInSpacesBar = false // ...and whether it began in the spaces bar
     var primaryHeight: CGFloat = Controller.currentPrimaryHeight()
     var timer: Timer?
 

@@ -154,9 +154,9 @@ extension Controller {
 
     // Fade out alongside Mission Control's close animation the moment the user does something
     // that closes it, rather than waiting for the window teardown.
-    func triggerHide() {
+    func triggerHide(because cause: HideCause) {
         guard mcShowing else { return }
-        hide(because: .input)
+        hide(because: cause)
         updateVisibility(fadeOut: Fade.mission)
     }
 }

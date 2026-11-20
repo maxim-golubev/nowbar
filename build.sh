@@ -11,8 +11,8 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 
-VERSION="0.3.0"
-BUILD_NUMBER="3"
+VERSION="0.3.1"
+BUILD_NUMBER="4"
 DEST="/Applications/NowBar.app"
 STAGE="build/NowBar.app"
 LSREGISTER="/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister"

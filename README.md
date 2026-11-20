@@ -104,10 +104,11 @@ play button through the event tap, confirms that playback changed, and puts it b
 - Whether a released swipe opens or closes Mission Control is predicted. When macOS
   decides otherwise, the controller corrects itself within about a third of a second.
 - The controller fades out with Mission Control on Escape, Return, the Mission Control
-  key, Ctrl-↑ and Ctrl-↓, and on a click outside it that isn't a drag. A close it doesn't
-  see coming, through another shortcut or a hot corner, still takes it off screen, at
-  the end of Mission Control's animation instead of with it. If a click didn't close
-  Mission Control after all, the controller comes back after 1.5 s.
+  key, Ctrl-↑ and Ctrl-↓, and on a click outside it that isn't a drag, a desktop in the
+  spaces bar included. A close it doesn't see coming, through another shortcut or a hot
+  corner, still takes it off screen, at the end of Mission Control's animation instead
+  of with it. If a click didn't close Mission Control after all, the controller comes
+  back: after 0.6 s for a click in the spaces bar, 1.5 s elsewhere.
 - There is one controller, on the display that has the pointer when it appears.
 
 ## Install

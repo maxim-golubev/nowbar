@@ -79,8 +79,8 @@ extension Controller {
         return nil
     }
 
-    // A click in the top strip of its monitor is the Mission Control spaces bar — switching
-    // spaces keeps MC open, so it must NOT dismiss the HUD.
+    // The top strip of a monitor in Mission Control is the spaces bar. A click on a desktop
+    // there switches to it and closes Mission Control; a click on an empty spot doesn't.
     func isInTopStrip(_ point: CGPoint) -> Bool {
         let cocoaY = primaryHeight - point.y
         for s in NSScreen.screens {
@@ -122,7 +122,7 @@ extension Controller {
 
         switch type {
         case .keyDown:
-            if Self.closesMissionControl(keyCode: keyCode, flags: flags) { triggerHide() }
+            if Self.closesMissionControl(keyCode: keyCode, flags: flags) { triggerHide(because: .input) }
             return false
         case .leftMouseDown:
             hudOwnsPress = false; clickOrigin = nil   // a new press: nothing carried over from a lost release
@@ -131,12 +131,15 @@ extension Controller {
                 hudOwnsPress = true
                 return true    // Mission Control never sees it, so it never selects the window behind
             }
-            // Outside the HUD it may be a click on a thumbnail (which closes Mission Control) or
-            // the start of a drag (which doesn't). The spaces bar never closes it.
-            if !isInTopStrip(point) { clickOrigin = point }
+            // Outside the HUD it may be a click on a thumbnail or a desktop (which closes
+            // Mission Control) or the start of a drag (which doesn't): decided on release.
+            clickOrigin = point
+            clickInSpacesBar = isInTopStrip(point)
             return false
         case .leftMouseUp:
-            if let o = clickOrigin, hypot(point.x - o.x, point.y - o.y) < 5 { triggerHide() }
+            if let o = clickOrigin, hypot(point.x - o.x, point.y - o.y) < 5 {
+                triggerHide(because: clickInSpacesBar ? .spacesBarClick : .input)
+            }
             clickOrigin = nil
             return false
         default:
